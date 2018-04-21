@@ -1,6 +1,6 @@
 {
 	"name": "Derpi-Notify",
-	"version": "1.0.2",
+	"version": "1.0.3",
 	"description": "Keep track of your Derpibooru notifications and messages in (almost) real time",
 	"applications": {
 		"gecko": {
@@ -30,9 +30,9 @@
 	"content_scripts": [
 		{
 			"matches": [
-				"https://derpibooru.org/",
-				"https://www.derpibooru.org/",
-				"https://trixiebooru.org/"
+				"https://derpibooru.org/*",
+				"https://www.derpibooru.org/*",
+				"https://trixiebooru.org/*"
 			],
 			"js": [
 				"js/derpi-notify.js"
