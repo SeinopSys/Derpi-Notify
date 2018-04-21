@@ -1,0 +1,175 @@
+:root {
+	--icon-color: #fff;
+	--message-icon-active-color: #f80;
+}
+
+.hidden {
+	display: none !important;
+}
+
+.align-center {
+	text-align: center;
+}
+
+body {
+	color: var(--popup-text);
+	background: var(--popup-bg);
+    font-family: verdana,arial,helvetica,sans-serif;
+	margin: 0;
+}
+
+a, a:active, a:visited {
+    color: var(--link-normal);
+	text-decoration: none;
+}
+
+a:hover {
+    color: var(--link-hover);
+}
+
+#content {
+	background: var(--container-bg);
+    padding: 12px;
+}
+
+#content > * {
+	margin: 0 0 10px;
+}
+
+#content > *:last-child {
+	margin-bottom: 0;
+}
+
+h1, h2, h3, h4, h5 {
+    font-weight: normal;
+    text-rendering: optimizeLegibility;
+    margin-bottom: .62em;
+}
+
+.button, .sp-choose {
+    background-color: var(--button-bg);
+    border: 1px solid var(--button-border);
+    box-sizing: border-box;
+    color: var(--button-text);
+    display: inline-block;
+    font-family: inherit;
+    font-size: 14px;
+    padding: 4px 6px;
+    border-radius: 0;
+    cursor: pointer;
+}
+
+.button:hover, .sp-choose:hover {
+    background-color: var(--button-bg-hover);
+    border-color: var(--button-border-hover);
+}
+
+.button:active, .button:hover, .button:visited, .sp-choose:active, .sp-choose:hover {
+    color: var(--button-text);
+}
+
+.input, .sp-input {
+    box-sizing: border-box;
+    padding: 6px;
+    border: 1px solid var(--button-border);
+    font-size: 14px;
+    font-family: "Droid Sans Mono",monospace;
+    color: var(--button-text);
+    background: var(--button-bg);
+    max-width: 100%;
+    border-radius: 0;
+}
+
+.input:focus, .sp-input:focus {
+    outline: 0;
+    border: 1px solid var(--button-border-hover);
+    background: var(--button-bg-hover);
+}
+
+.input-short {
+	width: 70px;
+}
+
+.input:disabled, .button:disabled {
+	opacity: .7;
+	cursor: not-allowed;
+}
+
+.block-tab {
+    border: 1px solid var(--block-tab-border);
+    background: var(--popup-bg);
+    padding: 10px;
+}
+
+.field {
+	display: flex;
+	width: 100%;
+	flex-flow: row wrap;
+	justify-content: flex-start;
+	align-items: center;
+}
+
+.field input,
+.field select,
+.field .sp-replacer {
+	margin: 0 .5em;
+}
+
+.field input:first-child,
+.field select:first-child,
+.field .sp-replacer:first-child {
+	margin-left: 0;
+}
+
+.field input:last-child,
+.field select:last-child,
+.field .sp-replacer:last-child {
+	margin-right: 0;
+}
+
+.field:not(:last-child) {
+    margin-bottom: 10px;
+}
+
+.fieldlabel {
+	flex: 0 0 100%;
+	margin-top: .3em;
+	font-style: italic;
+}
+
+.field .error {
+	flex: 0 0 100%;
+	margin: .3em 0 0 0;
+	background: var(--button-danger-bg);
+	border: 1px solid var(--button-danger-border);
+	--padding: .6em;
+	padding: var(--padding);
+	list-style: none;
+	box-sizing: border-box;
+}
+.field .error li:not(:last-child){
+	margin-bottom: var(--padding);
+}
+
+fieldset {
+	padding: 1em;
+	border: 1px solid;
+}
+
+fieldset legend {
+	padding: 0 .5em;
+	border: inherit;
+}
+
+button, select {
+    text-transform: none;
+}
+
+footer {
+	color: var(--footer-text);
+	padding: 1em;
+}
+
+footer p {
+	margin: 0;
+}

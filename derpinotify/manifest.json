@@ -1,0 +1,51 @@
+{
+	"name": "Derpi-Notify",
+	"version": "1.0.0",
+	"description": "Keep track of your Derpibooru notifications and messages in (almost) real time",
+	"applications": {
+		"gecko": {
+			"strict_min_version": "54.0"
+		}
+	},
+	"permissions": [
+		"https://derpibooru.org/",
+		"storage",
+		"notifications"
+	],
+	"optional_permissions": [
+		"https://www.derpibooru.org/",
+		"https://trixiebooru.org/"
+	],
+	"background": {
+		"page": "background.html"
+	},
+	"browser_action": {
+		"default_popup": "popup.html",
+		"default_icon": {
+			"16": "icons/notif-16.png",
+			"32": "icons/notif-32.png",
+			"48": "icons/notif-48.png",
+			"128": "icons/notif-128.png"
+		}
+	},
+	"options_page": "options.html",
+	"content_scripts": [
+		{
+			"matches": [
+				"https://derpibooru.org/*",
+				"https://trixiebooru.org/*"
+			],
+			"js": [
+				"js/derpi-notify.js"
+			],
+			"run_at": "document_end"
+		}
+	],
+	"icons": {
+		"16": "icons/app-16.png",
+		"32": "icons/app-32.png",
+		"48": "icons/app-48.png",
+		"128": "icons/app-128.png"
+	},
+	"manifest_version": 2
+}

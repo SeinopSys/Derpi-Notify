@@ -1,0 +1,19 @@
+:root {
+	--popup-bg: #412121;
+	--popup-text: #e0e0e0;
+	--icon-bg-normal: #b43535;
+	--icon-bg-hover: #942c2c;
+	--icon-text: var(--popup-text);
+	--footer-text: #918181;
+	--link-normal: #f5ff00;
+	--link-hover: #fff3bd;
+	--container-bg: transparent;
+	--button-bg:#411d1d;
+	--button-border: #614444;
+	--button-text: var(--popup-text);
+	--button-bg-hover: #532525;
+	--button-border-hover: #936464;
+	--block-tab-border: #7c2424;
+	--button-danger-bg: #3b3b3b;
+    --button-danger-border: #6f6363;
+}

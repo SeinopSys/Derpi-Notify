@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Options - Derpi-Notify</title>
+<link rel="stylesheet" href="css/spectrum.css">
+<link rel="stylesheet" href="css/global.css">
+<link rel="stylesheet" href="css/options.css">
+</head>
+<body>
+
+<div id="container">
+	<div id="content">
+		<h1>Derpi-Notify Options</h1>
+
+		<form id="options-form">
+			<div class="block-tab">
+				<div class="field">
+					<label for="badgeColor">Counter background color</label>
+					<input type="color" name="badgeColor" id="badgeColor">
+				</div>
+
+				<div class="field">
+					<label for="preferredDomain">Preferred domain</label>
+					<select class="input" name="preferredDomain" id="preferredDomain"></select>
+					<div class="fieldlabel">
+						Choose the domain you're usually signed in on. You may be prompted for additional permissions after saving.
+					</div>
+				</div>
+
+				<div class="field">
+					<label for="theme">Theme</label>
+					<select class="input" name="theme" id="theme"></select>
+					<div class="fieldlabel">
+						Auto will make the extension use whatever theme you have selected on the site.
+					</div>
+				</div>
+
+				<div class="field">
+					<label for="updateInterval">Update counters every</label>
+					<input type="number" class="input input-short" name="updateInterval" id="updateInterval" min="30" step="1">
+					<label for="updateInterval">seconds</label>
+				</div>
+
+				<div class="field">
+					<input type="checkbox" name="notifEnabled" id="notifEnabled" value="true">
+					<label for="notifEnabled">Enable desktop notifications</label>
+				</div>
+
+				<fieldset>
+					<legend>Desktop notification options</legend>
+
+					<div class="field">
+						<input type="checkbox" name="notifSound" id="notifSound" value="true">
+						<label for="notifSound">Play a sound when you receive a notification</label>
+					</div>
+
+					<div class="field">
+						<label for="notifTimeout">Automatically hide notification after</label>
+						<input type="number" class="input input-short" name="notifTimeout" id="notifTimeout" min="0" step="1">
+						<label for="notifTimeout">seconds</label>
+						<div class="fieldlabel">
+							How long to display the notification for before it's cleared automatically. Enter 0 to make the notification persist until clicked or dismissed.
+						</div>
+					</div>
+
+					<div class="field">
+						<input type="checkbox" name="notifIcons" id="notifIcons" value="true">
+						<label for="notifIcons">Display button icons on notification</label>
+						<div class="fieldlabel">
+							This lets you turn off the envelope and bell icon from before the buttons in the notification
+						</div>
+					</div>
+				</fieldset>
+			</div>
+
+			<div class="flex-save">
+				<button class="button" id="submit-button">Save</button>
+				<p class="hidden" id="saving-settings">&nbsp;Saving settings&hellip;</p>
+			</div>
+		</form>
+	</div>
+</div>
+
+<footer>Derpi-Notify <span id="version"></span></footer>
+
+<script src="js/jquery-3.3.1.slim.min.js"></script>
+<script src="js/spectrum.js"></script>
+<script src="js/domain-permissions.js"></script>
+<script src="js/options.js"></script>
+</body>
+</html>

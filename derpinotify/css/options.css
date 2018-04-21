@@ -1,0 +1,45 @@
+.sp-replacer {
+	color: var(--button-text);
+	border: 1px solid var(--button-border);
+	background: var(--button-bg);
+}
+.sp-preview {
+	height: 20px;
+	width: 20px;
+	border: 1px solid;
+	border-color: inherit;
+}
+
+.sp-replacer:hover, .sp-replacer.sp-active, .sp-container {
+	color: var(--button-text) !important;
+	background: var(--button-bg-hover) !important;
+	border-color: var(--button-border-hover) !important;
+}
+
+.sp-picker-container {
+	border-color: transparent;
+}
+
+.sp-cancel {
+	margin-right: 1em;
+}
+
+.sp-color, .sp-hue, .sp-clear {
+	border: 1px solid var(--button-border);
+}
+
+.sp-palette-container {
+	border-color: inherit !important;
+}
+
+.flex-save {
+	display: flex;
+	margin-top: 1.2em;
+	flex-flow: row nowrap;
+	align-items: center;
+	justify-content: flex-start;
+}
+
+.flex-save p {
+	margin: 0;
+}

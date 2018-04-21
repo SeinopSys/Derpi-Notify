@@ -1,0 +1,25 @@
+{
+	"browser": true,
+	"camelcase": true,
+	"curly": false,
+	"devel": true,
+	"esnext": true,
+	"globals": {
+		"chrome": true,
+		"fa": true,
+		"browser": true,
+		"checkDomainPermissions": true,
+		"requestDomainPermission": true,
+		"removeDomainPermission": true
+	},
+	"immed": true,
+	"jquery": true,
+	"lastsemic": true,
+	"laxbreak": true,
+	"laxcomma": false,
+	"mocha": false,
+	"newcap": true,
+	"strict": true,
+	"undef": true,
+	"unused": false
+}
