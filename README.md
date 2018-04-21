@@ -2,6 +2,9 @@
 
 Keep track of your Derpibooru notifications and messages in (almost) real time
 
+
+<p align="center"><a href="https://chrome.google.com/webstore/detail/derpi-notify/injlokbojlfffbonihefcbhikkkpepgn"><img src="https://developer.chrome.com/webstore/images/ChromeWebStore_BadgeWBorder_v2_340x96.png" alt="Download Derpi-Notify from the Chrome Web Store"></a></p>
+
 ## How does it work?
 
 The extension sends a request to the About page (which is the most lightweight page on the site) every `N` seconds (which can be adjusted in the options) and looks for the notification and message counters on the page.
