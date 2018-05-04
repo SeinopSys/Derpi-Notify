@@ -20,7 +20,7 @@
 
 	$notifContainer.prepend($(fa.bell).addClass('icon-image')).on('click', e => {
 		e.preventDefault();
-		chrome.runtime.sendMessage({ action: "opeNotifsPage" });
+		chrome.runtime.sendMessage({ action: "openNotifisPage" });
 	});
 	$messageContainer.prepend($(fa.envelope).addClass('icon-image')).on('click', e => {
 		e.preventDefault();

@@ -4,6 +4,8 @@
 
 	const SCOPE = {};
 
+	const isFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
+
 	const NOTIF_ID = chrome.runtime.getManifest().name;
 	const LINKS = {
 		parseURL: '/pages/about',
@@ -371,14 +373,17 @@
 					}
 					else this._buttonIndexes.messages = -1;
 					const persist = SCOPE.prefs.get('notifTimeout') === 0;
-					chrome.notifications.create(NOTIF_ID, {
+					const notify = {
 						type: 'basic',
 						iconUrl: 'icons/notif-128.png',
 						title: 'Derpibooru',
 						message: 'You have unread notifications',
-						buttons,
-						requireInteraction: persist,
-					}, () => {
+					}
+					if (!isFirefox) {
+						notify.buttons = buttons
+						notify.requireInteraction = persist
+					}
+					chrome.notifications.create(NOTIF_ID, notify, () => {
 						if (!persist)
 							this.setNotifTimeout();
 					});
@@ -518,7 +523,7 @@
 			case 'getOptionsData':
 				resp(SCOPE.ext.getOptionsData());
 				break;
-			case 'opeNotifsPage':
+			case 'openNotifisPage':
 				openNotifsPage();
 				break;
 			case 'openMessagesPage':
