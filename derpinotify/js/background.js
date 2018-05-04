@@ -378,15 +378,24 @@
 						iconUrl: 'icons/notif-128.png',
 						title: 'Derpibooru',
 						message: 'You have unread notifications',
+						buttons,
+						requireInteraction: persist,
 					}
-					if (!isFirefox) {
-						notify.buttons = buttons
-						notify.requireInteraction = persist
+					const doCreateNotify = () => {
+						chrome.notifications.create(NOTIF_ID, notify, () => {
+							if (!persist)
+								this.setNotifTimeout();
+						});
 					}
-					chrome.notifications.create(NOTIF_ID, notify, () => {
-						if (!persist)
-							this.setNotifTimeout();
-					});
+
+					try {
+						doCreateNotify()
+					} catch(e) {
+						if (!isFirefox) throw e // fix does not apply to other browsers
+						delete notify.buttons
+						delete notify.requireInteraction
+						doCreateNotify()
+					}
 				}
 			});
 		}
