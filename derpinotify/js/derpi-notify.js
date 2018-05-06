@@ -2,7 +2,9 @@
 
 	"use strict";
 
-	chrome.runtime.sendMessage({ action: "getSelectors" }, resp => {
+	const isFirefox = 'browser' in window;
+
+	const callback = resp => {
 		if (resp.onlyDomain !== location.host)
 			return;
 
@@ -20,6 +22,10 @@
 		};
 
 		chrome.runtime.sendMessage({ action: "onSiteUpdate", data });
-	});
+	};
+
+	if (!isFirefox)
+		chrome.runtime.sendMessage({ action: "getSelectors" }, callback);
+	else browser.runtime.sendMessage({ action: "getSelectors" }).then(callback);
 
 })();

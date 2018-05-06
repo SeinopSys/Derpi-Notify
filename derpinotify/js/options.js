@@ -2,6 +2,9 @@
 
 	"use strict";
 
+	const isFirefox = 'browser' in window;
+	$('body').addClass(isFirefox ? 'firefox' : 'chrome');
+
 	// Convert .serializeArray() result to object
 	$.fn.mkData = function(obj) {
 		let tempData = this.find(':input:valid').serializeArray(), data = {};

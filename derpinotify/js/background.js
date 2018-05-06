@@ -4,7 +4,7 @@
 
 	const SCOPE = {};
 
-	const isFirefox = browser in window;
+	const isFirefox = 'browser' in window;
 
 	const NOTIF_ID = chrome.runtime.getManifest().name;
 	const LINKS = {
@@ -359,7 +359,7 @@
 					if (hasNotifs){
 						buttons.push({
 							title: 'View '+plural(this._unread.notifs, 'Notification'),
-							iconUrl: displayIcons ? 'icons/bell.svg' : undefined,
+							iconUrl: displayIcons ? (isFirefox ? '\ud83d\udd14' : 'icons/bell.svg') : undefined,
 						});
 						this._buttonIndexes.notifs = 0;
 					}
@@ -367,7 +367,7 @@
 					if (this._unread.messages > 0){
 						buttons.push({
 							title: 'View '+plural(this._unread.messages, 'Message'),
-							iconUrl: displayIcons ? 'icons/envelope.svg' : undefined,
+							iconUrl: displayIcons ? (isFirefox ? '\u2709' : 'icons/envelope.svg') : undefined,
 						});
 						this._buttonIndexes.messages = hasNotifs ? 1 : 0;
 					}
@@ -378,20 +378,20 @@
 						iconUrl: 'icons/notif-128.png',
 						title: 'Derpibooru',
 						message: 'You have unread notifications',
-						buttons,
-						requireInteraction: persist,
 					};
 
-					try {
-						this.createNotif(params, persist);
+					if (!isFirefox){
+						params.buttons = buttons;
+						params.requireInteraction = persist;
 					}
-					catch(e) {
-						if (!isFirefox)
-							throw e; // fix does not apply to other browsers
-						delete params.buttons;
-						delete params.requireInteraction;
-						this.createNotif(params, persist);
+					else {
+						params.message += ':\n';
+						buttons.forEach(btn => {
+							params.message += '\n'+(displayIcons ? btn.iconUrl+'   ' : '')+btn.title.replace(/^View /,'');
+						});
 					}
+
+					this.createNotif(params, persist);
 				}
 			});
 		}
@@ -558,5 +558,11 @@
 		}
 		chrome.notifications.clear(notifId);
 	});
+
+	// Set a click handler for Firefox notifications
+	if (isFirefox)
+		browser.notifications.onClicked.addListener(notifId => {
+			browser.notifications.clear(notifId);
+		});
 
 })();
