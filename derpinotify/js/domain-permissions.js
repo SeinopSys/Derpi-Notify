@@ -1,7 +1,8 @@
 (function(){
 	"use strict";
 
-	const firefox = 'browser' in window;
+	const isFirefox = 'browser' in window;
+
 	function domainPermissionCallback(result, res, rej){
 		if (result)
 			res();
@@ -10,7 +11,7 @@
 	function domainPermissionAction(domain, action){
 		const perm = { origins: [ `https://${domain}/` ] };
 
-		if (firefox)
+		if (isFirefox)
 			return browser.permissions[action](perm)
 				.then(result => {
 					return new Promise((res, rej) => {
