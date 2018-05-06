@@ -3,7 +3,7 @@
 Keep track of your Derpibooru notifications and messages in (almost) real time
 
 
-<p align="center"><a href="https://chrome.google.com/webstore/detail/derpi-notify/injlokbojlfffbonihefcbhikkkpepgn"><img src="https://developer.chrome.com/webstore/images/ChromeWebStore_BadgeWBorder_v2_340x96.png" alt="Download Derpi-Notify from the Chrome Web Store"></a></p>
+<p align="center"><a href="https://chrome.google.com/webstore/detail/derpi-notify/injlokbojlfffbonihefcbhikkkpepgn"><img src="https://developer.chrome.com/webstore/images/ChromeWebStore_BadgeWBorder_v2_340x96.png" alt="Download Derpi-Notify from the Chrome Web Store"></a> <a href="https://addons.mozilla.org/en-US/firefox/addon/derpi-notify/"><img src="https://cdn.rawgit.com/alrra/browser-logos/da2477b1/src/firefox/firefox.svg" height="96" alt="Download Derpi-Notify from Firefox Add-ons"></a></p>
 
 ## How does it work?
 
