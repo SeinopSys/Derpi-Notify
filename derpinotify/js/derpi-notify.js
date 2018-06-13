@@ -2,6 +2,10 @@
 
 	"use strict";
 
+	// Avoid re-sending data from a cached page
+	if (!!window.performance && window.performance.getEntriesByType('navigation')[0].type === "back_forward")
+		return;
+
 	const isFirefox = 'browser' in window;
 
 	const callback = resp => {
