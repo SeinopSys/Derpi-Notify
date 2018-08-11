@@ -203,9 +203,6 @@
 					});
 			});
 	});
-	$notifEnabled.on('click', function(){
-		$testButton.prop('disabled', !this.checked);
-	});
 	$testButton.on('click', (e) => {
 		e.preventDefault();
 

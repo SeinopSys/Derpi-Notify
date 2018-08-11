@@ -44,8 +44,8 @@
 
 				<div class="field">
 					<input type="checkbox" name="notifSound" id="notifSound" value="true">
-					<label for="notifSound">Play a sound when you receive a notification</label>
-					<div class="fieldlabel">
+					<label for="notifSound">Play a sound when the counter increases</label>
+					<div class="fieldlabel no-firefox">
 						Windows 10 users running Chrome 68+ may want to  disable this to avoid double notification sounds (one from the extension and one from the system) until <a href="https://bugs.chromium.org/p/chromium/issues/detail?id=872698" target="_blank">this bug</a> is fixed.
 					</div>
 				</div>
@@ -59,7 +59,7 @@
 					</div>
 
 					<div class="field">
-						<label for="notifTimeout">Automatically hide notification after</label>
+						<label for="notifTimeout">Hide notification after</label>
 						<input type="number" class="input input-short" name="notifTimeout" id="notifTimeout" min="0" step="1">
 						<label for="notifTimeout">seconds</label>
 						<div class="fieldlabel">
@@ -69,15 +69,17 @@
 
 					<div class="field">
 						<input type="checkbox" name="notifIcons" id="notifIcons" value="true">
-						<label for="notifIcons">Display button icons on notification</label>
+						<label for="notifIcons">Display <span class="no-firefox">button</span> icons</label>
 						<div class="fieldlabel">
-							This lets you turn off the envelope and bell icons in notifications
+							This lets you turn off the envelope and bell icons in notifications.
 						</div>
 					</div>
 
-					<p class="field-pre">Select what color you prefer for the button icons (e.g. set both to white to match Windows 10's notification popup).</p>
+					<div class="no-firefox">
+						<p class="field-pre">Select what color you prefer for the button icons (e.g. set both to white to match Windows 10's notification popup).</p>
 
-					<div class="field" id="notifIconStyleSection"></div>
+						<div class="field" id="notifIconStyleSection"></div>
+					</div>
 				</fieldset>
 			</div>
 

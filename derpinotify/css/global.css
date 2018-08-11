@@ -18,6 +18,15 @@ body {
 	margin: 0;
 }
 
+
+body.firefox .no-firefox,
+body.firefox .chrome-only,
+body.chrome .no-chrome,
+body.chrome .firefox-only {
+	display: none;
+	speak: none;
+}
+
 a, a:active, a:visited {
     color: var(--link-normal);
 	text-decoration: none;
