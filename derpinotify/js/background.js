@@ -1,4 +1,4 @@
-(function(undefined){
+(function(undefined) {
 
 	"use strict";
 
@@ -13,14 +13,18 @@
 		notifs: '/notifications',
 		signInPage: '/users/sign_in',
 	};
-	const VALID_DOMAINS = (function(){
-		const manif = chrome.runtime.getManifest();
+	const VALID_DOMAINS = (function() {
+		const manifest = chrome.runtime.getManifest();
 		//jshint -W106
-		return manif.permissions.concat(manif.optional_permissions)
+		return manifest.permissions.concat(manifest.optional_permissions)
 			.filter(el => /^http/.test(el))
 			.map(el => el.replace(/^https?:\/\/([^/]+)\/$/, '$1'));
 	})();
 	const VALID_THEMES = ['default', 'dark', 'red', 'auto'];
+	const VALID_ICON_STYLES = {
+		bell: ['black', 'white'],
+		envelope: ['orange', 'black', 'white'],
+	};
 	const SELECTORS = {
 		notifs: '.js-notification-ticker',
 		messages: '.fa-embedded--unread-message + *, .fa-embedded--message + *',
@@ -41,31 +45,33 @@
 		notifSound: true,
 		notifTimeout: 0,
 		notifIcons: true,
+		bellIconStyle: VALID_ICON_STYLES.bell[0],
+		envelopeIconStyle: VALID_ICON_STYLES.envelope[0],
 	};
 
-	function parseHtml(html){
+	function parseHtml(html) {
 		return (new DOMParser()).parseFromString(html, "text/html");
 	}
 
-	function plural(n,w){
+	function plural(n, w) {
 		const s = n !== 1 ? 's' : '';
-		return `${n} ${w+s}`;
+		return `${n} ${w + s}`;
 	}
 
-	function shortenCount(cnt){
+	function shortenCount(cnt) {
 		return cnt < 10000
-			? cnt+''
+			? cnt + ''
 			: (
 				cnt < 1000000
-				? Math.round(cnt/1000)+'k'
-				: Math.round(cnt/1000000)+'m'
+					? Math.round(cnt / 1000) + 'k'
+					: Math.round(cnt / 1000000) + 'm'
 			);
 	}
 
 	// Return values range from 0 to 255 (inclusive)
 	// http://stackoverflow.com/questions/11867545#comment52204960_11868398
-	function yiq(r,g,b){
-		return ((r*299)+(g*587)+(b*114))/1000;
+	function yiq(r, g, b) {
+		return ((r * 299) + (g * 587) + (b * 114)) / 1000;
 	}
 
 	class ErrorCollection {
@@ -87,18 +93,18 @@
 			}
 		}
 
-		getAll(){
+		getAll() {
 			return this._collection;
 		}
 
-		any(){
+		any() {
 			return this.count > 0;
 		}
 	}
 
 	class Options {
-		constructor() {
-			this._values = {};
+		constructor(values = {}) {
+			this._values = values;
 		}
 
 		loadUserOptions() {
@@ -106,7 +112,8 @@
 			try {
 				parsed = JSON.parse(localStorage.getItem('options'));
 			}
-			catch (e){}
+			catch (e){
+			}
 
 			let setThese;
 			if (typeof parsed !== 'undefined' && parsed !== null)
@@ -169,6 +176,14 @@
 						if (typeof value !== 'boolean')
 							errors.push('Invalid value for notification button icons on/off toggle');
 						break;
+					case 'bellIconStyle':
+						if (typeof value !== 'string' || VALID_ICON_STYLES.bell.indexOf(value) === -1)
+							errors.push('The bell icon style is invalid');
+						break;
+					case 'envelopeIconStyle':
+						if (typeof value !== 'string' || VALID_ICON_STYLES.envelope.indexOf(value) === -1)
+							errors.push('The envelope icon style is invalid');
+						break;
 					case 'notifTimeout':
 						value = parseInt(value, 10);
 						if (isNaN(value) || !isFinite(value))
@@ -189,18 +204,18 @@
 			});
 		}
 
-		_rejectSetting(name, value, errors, rej){
+		_rejectSetting(name, value, errors, rej) {
 			console.error('Failed to set setting', name, value, errors);
 			rej(errors);
 		}
 
-		_resolveSetting(name, value, res){
+		_resolveSetting(name, value, res) {
 			this._values[name] = value;
 			this.postSetting(name, value);
 			res();
 		}
 
-		processOptions(setThese){
+		processOptions(setThese) {
 			return new Promise(res => {
 				const promises = [];
 				$.each(setThese, (key, value) => {
@@ -219,7 +234,7 @@
 			});
 		}
 
-		saveOptions(){
+		saveOptions() {
 			localStorage.setItem('options', JSON.stringify(this._values));
 		}
 
@@ -233,7 +248,7 @@
 					break;
 				case 'notifEnabled':
 					if (value === false)
-						chrome.notifications.clear(NOTIF_ID);
+						SCOPE.ext.clearNotif();
 					break;
 				case 'notifTimeout':
 					if (value !== 0)
@@ -245,39 +260,42 @@
 			return this._values[name];
 		}
 
-		getAll(){
+		getAll() {
 			return this._values;
 		}
 	}
 
 	class Extension {
-		constructor(){
+		constructor() {
 			this._unread = {
 				notifs: 0,
 				messages: 0,
 			};
 			this._buttonIndexes = {
-				notifs: -1,
-				messages: -1,
+				[NOTIF_ID]: {
+					notifs: -1,
+					messages: -1,
+				},
 			};
 			this._meta = {
 				signedIn: false,
 				username: '',
 				autoTheme: VALID_THEMES[0],
 			};
+			this._clearNotifTimeout = {};
 		}
 
-		setNotifs(count, fromOnSite = false){
+		setNotifs(count) {
 			this._unread.notifs = count === '' ? 0 : parseInt(count, 10);
-			this.setBadgeText(fromOnSite);
+			this.setBadgeText();
 		}
 
-		setMessages(count, fromOnSite = false){
+		setMessages(count) {
 			this._unread.messages = count === '' ? 0 : parseInt(count, 10);
-			this.setBadgeText(fromOnSite);
+			this.setBadgeText();
 		}
 
-		setSignedIn(bool){
+		setSignedIn(bool) {
 			this._meta.signedIn = bool;
 
 			if (this._meta.signedIn)
@@ -285,19 +303,19 @@
 			else this.setBadgeSignedOut();
 		}
 
-		setUsername(string){
+		setUsername(string) {
 			this._meta.username = string || '';
 		}
 
-		setAutoTheme(bodyDataThemeAttribute){
+		setAutoTheme(bodyDataThemeAttribute) {
 			this._meta.autoTheme = bodyDataThemeAttribute.split('-')[0];
 		}
 
-		setLastCheck(date){
+		setLastCheck(date) {
 			this._meta.lastCheck = date;
 		}
 
-		getPopupData(){
+		getPopupData() {
 			return {
 				notifs: this._unread.notifs,
 				messages: this._unread.messages,
@@ -310,18 +328,19 @@
 			};
 		}
 
-		getOptionsData(){
+		getOptionsData() {
 			return {
 				prefs: SCOPE.prefs.getAll(),
 				version: chrome.runtime.getManifest().version,
 				theme: this.getTheme(),
 				validDomains: VALID_DOMAINS,
 				validThemes: VALID_THEMES,
+				validIconStyles: VALID_ICON_STYLES,
 			};
 		}
 
-		getTheme(){
-			const setting = SCOPE.prefs.get('theme');
+		getTheme(prefs = SCOPE.prefs) {
+			const setting = prefs.get('theme');
 			if (setting === 'auto'){
 				if (this._meta.autoTheme)
 					return this._meta.autoTheme;
@@ -331,7 +350,7 @@
 			return setting;
 		}
 
-		setBadgeText(fromOnSite = false){
+		setBadgeText() {
 			let value = this._unread.notifs + this._unread.messages;
 			const newText = value === 0 ? '' : shortenCount(value);
 			chrome.browserAction.getBadgeText({}, currentText => {
@@ -340,81 +359,102 @@
 
 				chrome.browserAction.setBadgeText({ text: newText });
 
-				if (value === 0 || fromOnSite || (!isNaN(currentText) && currentText > newText))
+				if (value === 0 || (!isNaN(currentText) && currentText > newText))
 					return;
 
-				if (SCOPE.prefs.get('notifSound')){
-					NOTIFICATION_SOUND.currentTime = 0;
-					NOTIFICATION_SOUND.play();
-				}
-				if (SCOPE.prefs.get('notifEnabled')){
-					if (typeof this._clearNotifTimeout === 'number'){
-						clearInterval(this._clearNotifTimeout);
-						this._clearNotifTimeout = undefined;
-					}
-
-					const buttons = [];
-					const hasNotifs = this._unread.notifs > 0;
-					const displayIcons = SCOPE.prefs.get('notifIcons');
-					if (hasNotifs){
-						buttons.push({
-							title: 'View '+plural(this._unread.notifs, 'Notification'),
-							iconUrl: displayIcons ? (isFirefox ? '\ud83d\udd14' : 'icons/bell.svg') : undefined,
-						});
-						this._buttonIndexes.notifs = 0;
-					}
-					else this._buttonIndexes.notifs = -1;
-					if (this._unread.messages > 0){
-						buttons.push({
-							title: 'View '+plural(this._unread.messages, 'Message'),
-							iconUrl: displayIcons ? (isFirefox ? '\u2709' : 'icons/envelope.svg') : undefined,
-						});
-						this._buttonIndexes.messages = hasNotifs ? 1 : 0;
-					}
-					else this._buttonIndexes.messages = -1;
-					const persist = SCOPE.prefs.get('notifTimeout') === 0;
-					const params = {
-						type: 'basic',
-						iconUrl: 'icons/notif-128.png',
-						title: 'Derpibooru',
-						message: 'You have unread notifications',
-					};
-
-					if (!isFirefox){
-						params.buttons = buttons;
-						params.requireInteraction = persist;
-					}
-					else {
-						params.message += ':\n';
-						buttons.forEach(btn => {
-							params.message += '\n'+(displayIcons ? btn.iconUrl+'   ' : '')+btn.title.replace(/^View /,'');
-						});
-					}
-
-					this.createNotif(params, persist);
-				}
-			});
-		}
-		
-		createNotif(params, persist){
-			chrome.notifications.create(NOTIF_ID, params, () => {
-				if (!persist)
-					this.setNotifTimeout();
+				this.notifyUser();
 			});
 		}
 
-		setBadgeSignedOut(){
+		notifyUser(prefs = SCOPE.prefs, unread = this._unread, id = NOTIF_ID){
+			if (prefs.get('notifSound')){
+				this.playNotifSound();
+			}
+			if (prefs.get('notifEnabled')){
+				this.clearNotifTimeout(id);
+
+				const params = this.buildNotifParams(prefs, unread, id);
+
+				this.createNotif(prefs, params, id);
+			}
+		}
+
+		buildNotifParams(prefs, unread, id = NOTIF_ID) {
+			const buttons = [];
+			const hasNotifs = unread.notifs > 0;
+			const displayIcons = prefs.get('notifIcons');
+			const bellStyle = prefs.get('bellIconStyle');
+			const envelopeStyle = prefs.get('envelopeIconStyle');
+
+			this._buttonIndexes[id] = {
+				notifs: -1,
+				messages: -1,
+			};
+			if (hasNotifs){
+				buttons.push({
+					title: 'View ' + plural(unread.notifs, 'Notification'),
+					iconUrl: displayIcons ? (isFirefox ? '\ud83d\udd14' : `img/bell-${bellStyle}.svg`) : undefined,
+				});
+				this._buttonIndexes[id].notifs = 0;
+			}
+			if (unread.messages > 0){
+				buttons.push({
+					title: 'View ' + plural(unread.messages, 'Message'),
+					iconUrl: displayIcons ? (isFirefox ? '\u2709' : `img/envelope-${envelopeStyle}.svg`) : undefined,
+				});
+				this._buttonIndexes[id].messages = hasNotifs ? 1 : 0;
+			}
+			const persist = prefs.get('notifTimeout') === 0;
+
+			const params = {
+				type: 'basic',
+				iconUrl: 'img/notif-128.png',
+				title: 'Derpibooru',
+				message: 'You have unread notifications',
+			};
+
+			if (!isFirefox){
+				params.buttons = buttons;
+				params.requireInteraction = persist;
+			}
+			else {
+				params.message += ':\n';
+				buttons.forEach(btn => {
+					params.message += '\n' + (displayIcons ? btn.iconUrl + '   ' : '') + btn.title.replace(/^View /, '');
+				});
+			}
+
+			return params;
+		}
+
+		createNotif(prefs, params, id = NOTIF_ID) {
+			chrome.notifications.create(id, params, () => {
+				if (!params.requireInteraction)
+					this.setNotifTimeout(prefs, id);
+			});
+		}
+
+		clearNotif(id = NOTIF_ID){
+			return new Promise(res => {
+				chrome.notifications.clear(id, () => {
+					delete this._clearNotifTimeout[id];
+					res();
+				});
+			});
+		}
+
+		setBadgeSignedOut() {
 			chrome.browserAction.setBadgeBackgroundColor({ color: '#222' });
 			chrome.browserAction.setBadgeText({ text: '?' });
 		}
 
-		setBadgeSignedIn(){
+		setBadgeSignedIn() {
 			const color = SCOPE.prefs.get('badgeColor');
 			if (color)
 				chrome.browserAction.setBadgeBackgroundColor({ color });
 		}
 
-		setBadgeColor(){
+		setBadgeColor() {
 			chrome.browserAction.getBadgeText({}, ret => {
 				if (ret === '?')
 					return;
@@ -423,21 +463,32 @@
 			});
 		}
 
-		setNotifTimeout(){
-			this._clearNotifTimeout = setTimeout(() => {
-				chrome.notifications.clear(NOTIF_ID);
-				this._clearNotifTimeout = null;
-			}, SCOPE.prefs.get('notifTimeout') * 1000);
+		setNotifTimeout(prefs = SCOPE.prefs, id = NOTIF_ID) {
+			this._clearNotifTimeout[id] = setTimeout(() => {
+				this.clearNotif(id);
+			}, prefs.get('notifTimeout') * 1000);
 		}
 
-		restartUpdateInterval(){
+		clearNotifTimeout(id = NOTIF_ID) {
+			if (typeof this._clearNotifTimeout[id] === 'number'){
+				clearInterval(this._clearNotifTimeout[id]);
+				delete this._clearNotifTimeout[id];
+			}
+		}
+
+		restartUpdateInterval() {
 			if (typeof this._updateInterval !== 'undefined')
 				clearInterval(this._updateInterval);
 			this._updateInterval = setInterval(checkSiteData, SCOPE.prefs.get('updateInterval') * 1000);
 		}
 
-		getButtonIndexes(){
-			return this._buttonIndexes;
+		getButtonIndexes(id = NOTIF_ID) {
+			return this._buttonIndexes[id];
+		}
+
+		playNotifSound(){
+			NOTIFICATION_SOUND.currentTime = 0;
+			NOTIFICATION_SOUND.play();
 		}
 	}
 
@@ -473,7 +524,7 @@
 	}
 
 
-	function makeURLFromPath(url){
+	function makeURLFromPath(url) {
 		return `https://${SCOPE.prefs.get('preferredDomain')}${url}`;
 	}
 
@@ -482,11 +533,11 @@
 		return fetch(makeURLFromPath(path), params);
 	}
 
-	function openNotifsPage(){
+	function openNotifsPage() {
 		chrome.tabs.create({ url: makeURLFromPath(LINKS.notifs) });
 	}
 
-	function openMessagesPage(){
+	function openMessagesPage() {
 		chrome.tabs.create({ url: makeURLFromPath(LINKS.messages) });
 	}
 
@@ -529,13 +580,25 @@
 				SCOPE.ext.setAutoTheme(req.data.theme);
 				SCOPE.ext.restartUpdateInterval();
 				break;
+			case 'testMessage':
+				const id = NOTIF_ID + '-Test';
+				SCOPE.ext.clearNotif(id).then(() => {
+					const prefs = new Options(req.data);
+					const MAX = 256;
+					const unread = {
+						notifs: Math.round(Math.random() * MAX),
+						messages: Math.round(Math.random() * MAX),
+					};
+					SCOPE.ext.notifyUser(prefs, unread, id);
+				});
+				break;
 			case 'getPopupData':
 				resp(SCOPE.ext.getPopupData());
 				break;
 			case 'getOptionsData':
 				resp(SCOPE.ext.getOptionsData());
 				break;
-			case 'openNotifisPage':
+			case 'openNotifsPage':
 				openNotifsPage();
 				break;
 			case 'openMessagesPage':
@@ -546,15 +609,15 @@
 		}
 	});
 
-	chrome.notifications.onButtonClicked.addListener(function(notifId, btnIdx) {
-		const ixs = SCOPE.ext.getButtonIndexes();
-		switch (btnIdx){
+	chrome.notifications.onButtonClicked.addListener((notifId, btnIndex) => {
+		const ixs = SCOPE.ext.getButtonIndexes(notifId);
+		switch (btnIndex){
 			case ixs.notifs:
 				openNotifsPage();
-			break;
+				break;
 			case ixs.messages:
 				openMessagesPage();
-			break;
+				break;
 		}
 		chrome.notifications.clear(notifId);
 	});

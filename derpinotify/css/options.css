@@ -32,14 +32,70 @@
 	border-color: inherit !important;
 }
 
-.flex-save {
+.fancy-radio {
 	display: flex;
-	margin-top: 1.2em;
+	width: 100%;
 	flex-flow: row nowrap;
 	align-items: center;
 	justify-content: flex-start;
 }
+.fancy-radio > label {
+	display: block;
+	margin: 3px;
+	position: relative;
+	cursor: pointer;
+}
+.fancy-radio > label > img {
+	display: block;
+	height: 32px;
+	padding: 3px;
+	border: 5px solid var(--button-border);
+	border-radius: 8px;
+}
+.fancy-radio > label.dark > img {
+	background-color: #eee;
+}
+.fancy-radio > label.light > img {
+	background-color: #333;
+}
+.fancy-radio > label > input {
+	position: absolute;
+	lefT: -100px;
+	width: 0;
+	height: 0;
+}
+.fancy-radio > label > input:checked ~ img,
+.fancy-radio > label:hover > input ~ img {
+	border-color: var(--button-border-hover);
+}
 
+.flex-actions {
+	display: flex;
+	margin-top: 1.2em;
+	flex-flow: row nowrap;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.flex-actions > div {
+	display: inherit;
+	flex-flow: inherit;
+	align-items: inherit;
+}
+.flex-save {
+	justify-content: flex-start;
+}
 .flex-save p {
 	margin: 0;
+}
+
+#saved-settings:not(.hidden) {
+	animation: fade-out .5s 1.5s linear forwards;
+	user-select: none;
+	cursor: default;
+}
+
+@keyframes fade-out {
+	from { opacity: 1 }
+	to   { opacity: 0 }
 }

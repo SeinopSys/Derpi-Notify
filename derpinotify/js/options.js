@@ -7,14 +7,32 @@
 
 	// Convert .serializeArray() result to object
 	$.fn.mkData = function(obj) {
-		let tempData = this.find(':input:valid').serializeArray(), data = {};
-		$.each(tempData, function(i, el) {
-			if (/\[]$/.test(el.name)){
-				if (typeof data[el.name] === 'undefined')
-					data[el.name] = [];
-				data[el.name].push(el.value);
+		const $inputs = this.find(':input:valid');
+		let data = {};
+		$inputs.each((_, el) => {
+			if (el.nodeName === 'BUTTON')
+				return;
+
+			if (el.nodeName === 'INPUT'){
+				let { name, value } = el;
+				switch (el.type){
+					case "number":
+						value = parseInt(value, 10);
+					break;
+					case "checkbox":
+						value = el.checked;
+					break;
+					case "radio":
+						if (!el.checked)
+							return;
+					break;
+				}
+				data[name] = value;
 			}
-			else data[el.name] = el.value;
+			else {
+				let tempData = $(el).serializeArray();
+				data[tempData[0].name] = tempData[0].value;
+			}
 		});
 		if (typeof obj === 'object')
 			$.extend(data, obj);
@@ -49,6 +67,8 @@
 	const $form = $('#options-form');
 	const $submitButton = $('#submit-button');
 	const $savingSettings = $('#saving-settings');
+	const $savedSettings = $('#saved-settings');
+	const $testButton = $('#test-button');
 	const $badgeColor = $('#badgeColor');
 	const $preferredDomain = $('#preferredDomain');
 	const $updateInterval = $('#updateInterval');
@@ -56,6 +76,7 @@
 	const $notifSound = $('#notifSound');
 	const $notifTimeout = $('#notifTimeout');
 	const $notifIcons = $('#notifIcons');
+	const $notifIconStyleSection = $('#notifIconStyleSection');
 	const $theme = $('#theme');
 	const $themeLink = $(document.createElement('link')).attr('rel','stylesheet').appendTo('head');
 
@@ -107,6 +128,26 @@
 						.text($.capitalize(el))
 				);
 			});
+			$notifIconStyleSection.empty();
+			$.each(response.validIconStyles, (iconName, styles) => {
+				const $iconSelect = $(document.createElement('div')).attr('class','fancy-radio');
+				const groupName = `${iconName}IconStyle`;
+				$.each(styles, (_, style) => {
+					$iconSelect.append(
+						$(document.createElement('label')).attr('class', style === 'black' ? 'dark' : 'white').append(
+							$(document.createElement('input')).attr({
+								type: 'radio',
+								name: groupName,
+								value: style,
+							}).prop({
+								checked: style === response.prefs[groupName],
+							}),
+							$(document.createElement('img')).attr('src', `img/${iconName}-${style}.svg`)
+						)
+					);
+				});
+				$notifIconStyleSection.append($iconSelect);
+			});
 		});
 	}
 	getOptionsData();
@@ -114,13 +155,13 @@
 	function sub(enable){
 		$submitButton.attr('disabled', !enable);
 		$savingSettings[enable?'addClass':'removeClass']('hidden');
+		if (enable)
+			$savedSettings.removeClass('hidden');
+		else $savedSettings.addClass('hidden');
 	}
 
 	function updateOptions(data){
-		console.log('updateOptions', data);
 		chrome.runtime.sendMessage({ action: "updateOptions", data }, function(response) {
-			console.log(response);
-
 			sub(true);
 
 			$form.find('.error').remove();
@@ -142,20 +183,14 @@
 			}
 		});
 	}
+
+	const getFormData = () => $form.mkData();
+
 	$form.on('submit', e => {
 		e.preventDefault();
 		sub(false);
 
-		const data = {
-			badgeColor: $badgeColor.val(),
-			preferredDomain: $preferredDomain.val(),
-			theme: $theme.val(),
-			updateInterval: $updateInterval.val(),
-			notifEnabled: $notifEnabled.prop('checked'),
-			notifSound: $notifSound.prop('checked'),
-			notifTimeout: $notifTimeout.val(),
-			notifIcons: $notifIcons.prop('checked'),
-		};
+		const data = getFormData();
 
 		checkDomainPermissions(data.preferredDomain)
 			.then(() => { updateOptions(data) })
@@ -167,6 +202,16 @@
 						updateOptions(data);
 					});
 			});
+	});
+	$notifEnabled.on('click', function(){
+		$testButton.prop('disabled', !this.checked);
+	});
+	$testButton.on('click', (e) => {
+		e.preventDefault();
+
+		const data = getFormData();
+
+		chrome.runtime.sendMessage({ action: 'testMessage', data });
 	});
 
 })();
