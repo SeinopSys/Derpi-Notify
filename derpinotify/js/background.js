@@ -533,12 +533,26 @@
 		return fetch(makeURLFromPath(path), params);
 	}
 
+	function createTab(url) {
+		chrome.windows.getCurrent(currentWindow => {
+			if (currentWindow != null){
+				chrome.tabs.create({ url });
+			}
+			else {
+				return chrome.windows.create({
+					url,
+					'focused': true
+				});
+			}
+		});
+	}
+
 	function openNotifsPage() {
-		chrome.tabs.create({ url: makeURLFromPath(LINKS.notifs) });
+		createTab(makeURLFromPath(LINKS.notifs));
 	}
 
 	function openMessagesPage() {
-		chrome.tabs.create({ url: makeURLFromPath(LINKS.messages) });
+		createTab(makeURLFromPath(LINKS.messages));
 	}
 
 	chrome.runtime.onMessage.addListener((req, sender, resp) => {
