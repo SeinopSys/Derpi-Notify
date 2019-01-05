@@ -1,7 +1,8 @@
 #popup-icons {
 	display: flex;
-	margin-bottom: .2em;
 	background: var(--icon-bg-normal);
+	max-height: 4.08em;
+	overflow: hidden;
 }
 
 #popup-icons .icon-link {

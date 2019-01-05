@@ -1,6 +1,6 @@
 {
 	"name": "Derpi-Notify",
-	"version": "1.2.2",
+	"version": "1.2.3",
 	"description": "Keep track of your Derpibooru notifications and messages in (almost) real time",
 	"applications": {
 		"gecko": {

@@ -38,7 +38,7 @@ a:hover {
 
 #content {
 	background: var(--container-bg);
-    padding: 12px;
+    padding: 16px 12px;
 }
 
 #content > * {
