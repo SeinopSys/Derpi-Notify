@@ -95,16 +95,16 @@
 				showPalette: true,
 				showSelectionPalette: false,
 				palette: [
-					['#000'],
-					['#555'],
-					['#618fc3'],
-					['#08f'],
-					['#0a0'],
-					['#e80'],
-					['#d00'],
-					['#e0e'],
-					['#80f'],
-				],
+					'#000',
+					'#555',
+					'#618fc3',
+					'#08f',
+					'#0a0',
+					'#e80',
+					'#d00',
+					'#e0e',
+					'#80f',
+				].map(c => [c]),
 			});
 			$updateInterval.val(response.prefs.updateInterval);
 			$notifEnabled.prop('checked', response.prefs.notifEnabled);

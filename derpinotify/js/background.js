@@ -416,6 +416,7 @@
 			if (!isFirefox){
 				params.buttons = buttons;
 				params.requireInteraction = persist;
+				params.silent = true;
 			}
 			else {
 				params.message += ':\n';
@@ -428,10 +429,13 @@
 		}
 
 		createNotif(prefs, params, id = NOTIF_ID) {
-			chrome.notifications.create(id, params, () => {
+			const next = () => {
 				if (!params.requireInteraction)
 					this.setNotifTimeout(prefs, id);
-			});
+			};
+			if (isFirefox)
+				browser.notifications.create(id, params).then(next);
+			else chrome.notifications.create(id, params, next);
 		}
 
 		clearNotif(id = NOTIF_ID){
