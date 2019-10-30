@@ -5,6 +5,8 @@ Keep track of your Derpibooru notifications and messages in (almost) real time
 
 <p align="center"><a href="https://chrome.google.com/webstore/detail/derpi-notify/injlokbojlfffbonihefcbhikkkpepgn"><img src="https://developer.chrome.com/webstore/images/ChromeWebStore_BadgeWBorder_v2_340x96.png" height="60" alt="Download Derpi-Notify from the Chrome Web Store"></a> <a href="https://addons.mozilla.org/en-US/firefox/addon/derpi-notify/"><img src="https://addons.cdn.mozilla.net/static/img/addons-buttons/AMO-button_1.png" height="60" alt="Download Derpi-Notify from Firefox Add-ons"></a></p>
 
+<p align="center"><img alt="Download Derpi-Notify from the Chrome Web Store" src="https://img.shields.io/chrome-web-store/v/injlokbojlfffbonihefcbhikkkpepgn"> <img alt="Download Derpi-Notify from Firefox Add-ons" src="https://img.shields.io/amo/v/derpi-notify"></p>
+
 ## How does it work?
 
 The extension sends a request to the About page (which is the most lightweight page on the site) every `N` seconds (which can be adjusted in the options) and looks for the notification and message counters on the page.
