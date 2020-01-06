@@ -29,7 +29,7 @@
 		notifs: '.js-notification-ticker',
 		messages: '.fa-embedded--unread-message + *, .fa-embedded--message + *',
 		signedIn: 'a.header__link-user',
-		username: 'nav > a[href^="/profiles/"]',
+		username: 'nav > a[href^="/profiles/"]:not([href$="user_links"])',
 	};
 
 	const NOTIFICATION_SOUND = new Audio();
@@ -522,7 +522,7 @@
 				SCOPE.ext.setMessages($messageCount.text());
 				SCOPE.ext.setBadgeText();
 				SCOPE.ext.setSignedIn($page.find(SELECTORS.signedIn).length > 0);
-				SCOPE.ext.setUsername($page.find(SELECTORS.username).text());
+				SCOPE.ext.setUsername($page.find(SELECTORS.username).first().text());
 				SCOPE.ext.setAutoTheme($page.find('body').attr('data-theme'));
 			});
 	}
