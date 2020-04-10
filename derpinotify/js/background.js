@@ -9,7 +9,7 @@
 	const NOTIF_ID = chrome.runtime.getManifest().name;
 	const LINKS = {
 		parseURL: '/pages/about',
-		messages: '/messages',
+		messages: '/conversations',
 		notifs: '/notifications',
 		signInPage: '/session/new',
 	};
