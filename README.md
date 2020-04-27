@@ -15,11 +15,11 @@ The total amount is then displayed on the icon, and when clicked it opens a menu
 
 If you browse the site on the domain of your choosing the extension will keep the count synced with the page contents without having to wait for the next timed update.
 
-By default the the extension sends a notification and plays a sound when the total increases, but both the notification and its sound can be disabled if you only want the counter. The notification also disappears after a few seconds initially, but this can be changed to a longer duration or disabled entirely (by setting the timeout to 0), so only a click on the close button or one of the buttons will clear it.
+By default, the extension sends a notification and plays a sound when the total increases, but both the notification and its sound can be disabled if you only want the counter. The notification also disappears after a few seconds initially, but this can be changed to a longer duration or disabled entirely (by setting the timeout to 0), so only a click on the close button or one of the buttons will clear it.
 
 ## Attributions
 
- - Notificaton sound: [Appointed](https://notificationsounds.com/message-tones/appointed-529) from [NotificationSounds.com](https://notificationsounds.com)
+ - Notification sound: [Appointed](https://notificationsounds.com/message-tones/appointed-529) from [NotificationSounds.com](https://notificationsounds.com)
  - Application icon: based on [Trixie CM](https://ambassad0r.deviantart.com/art/Trixie-CM-564230189) by [Ambassad0r](https://ambassad0r.deviantart.com/)
  - Icons: [Font Awesome](https://fontawesome.com/license) v5.0.10
  - Color picker: [Spectrum](https://bgrins.github.io/spectrum/)
