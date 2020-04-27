@@ -1,7 +1,7 @@
 <p align="center"><img src="https://raw.githubusercontent.com/SeinopSys/Derpi-Notify/master/screenshots/chrome/notification.png" alt="Derpi-Notify Chrome Notification Screenshot" width="300px"> <img src="https://raw.githubusercontent.com/SeinopSys/Derpi-Notify/master/screenshots/chrome/popup.png" alt="Derpi-Notify Chrome Popup Screenshot" width="300px"></p>
 <h1 align="center"><img src="https://raw.githubusercontent.com/SeinopSys/Derpi-Notify/master/derpinotify/img/app-48.png" alt="Derpi-Notify Extension Logo" height="30px"> Derpi-Notify</h1>
 
-Keep track of your Derpibooru notifications and messages in (almost) real time
+<p align="center">Keep track of your Derpibooru notifications and messages in (almost) real time</p>
 
 <p align="center"><a href="https://chrome.google.com/webstore/detail/derpi-notify/injlokbojlfffbonihefcbhikkkpepgn"><img src="https://developer.chrome.com/webstore/images/ChromeWebStore_BadgeWBorder_v2_340x96.png" height="60" alt="Download Derpi-Notify from the Chrome Web Store"></a> <a href="https://addons.mozilla.org/en-US/firefox/addon/derpi-notify/"><img src="https://addons.cdn.mozilla.net/static/img/addons-buttons/AMO-button_1.png" height="60" alt="Download Derpi-Notify from Firefox Add-ons"></a></p>
 
