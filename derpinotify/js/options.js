@@ -134,7 +134,10 @@
 				const groupName = `${iconName}IconStyle`;
 				$.each(styles, (_, style) => {
 					$iconSelect.append(
-						$(document.createElement('label')).attr('class', style === 'black' ? 'dark' : 'white').append(
+						$(document.createElement('label')).attr({
+							'class': style === 'black' ? 'dark' : 'white',
+							title: `${$.capitalize(style.replace(/-/g, ' '))} ${$.capitalize(iconName)}`,
+						}).append(
 							$(document.createElement('input')).attr({
 								type: 'radio',
 								name: groupName,
@@ -192,16 +195,23 @@
 
 		const data = getFormData();
 
+		const requestPermission = () => {
+			requestDomainPermission(data.preferredDomain)
+				.then(() => { updateOptions(data) })
+				.catch(() => {
+					delete data.preferredDomain;
+					updateOptions(data);
+				});
+		};
+
+		if (isFirefox) {
+			requestPermission();
+			return;
+		}
+
 		checkDomainPermissions(data.preferredDomain)
 			.then(() => { updateOptions(data) })
-			.catch(() => {
-				requestDomainPermission(data.preferredDomain)
-					.then(() => { updateOptions(data) })
-					.catch(() => {
-						delete data.preferredDomain;
-						updateOptions(data);
-					});
-			});
+			.catch(requestPermission);
 	});
 	$testButton.on('click', (e) => {
 		e.preventDefault();

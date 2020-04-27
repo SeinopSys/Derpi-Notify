@@ -22,8 +22,8 @@
 	})();
 	const VALID_THEMES = ['default', 'dark', 'red', 'auto'];
 	const VALID_ICON_STYLES = {
-		bell: ['black', 'white'],
-		envelope: ['orange', 'black', 'white'],
+		bell: ['orange', 'orange-inverted', 'black', 'white'],
+		envelope: ['orange', 'orange-inverted', 'black', 'white'],
 	};
 	const SELECTORS = {
 		notifs: '.js-notification-ticker',
@@ -45,7 +45,7 @@
 		notifSound: true,
 		notifTimeout: 0,
 		notifIcons: true,
-		bellIconStyle: VALID_ICON_STYLES.bell[0],
+		bellIconStyle: VALID_ICON_STYLES.bell[2],
 		envelopeIconStyle: VALID_ICON_STYLES.envelope[0],
 	};
 
@@ -236,15 +236,13 @@
 
 		saveOptions() {
 			localStorage.setItem('options', JSON.stringify(this._values));
+			SCOPE.ext.restartUpdateInterval();
 		}
 
 		postSetting(name, value) {
 			switch (name){
 				case 'badgeColor':
 					SCOPE.ext.setBadgeColor();
-					break;
-				case 'updateInterval':
-					SCOPE.ext.restartUpdateInterval();
 					break;
 				case 'notifEnabled':
 					if (value === false)
@@ -480,10 +478,12 @@
 			}
 		}
 
-		restartUpdateInterval() {
+		restartUpdateInterval(recheck = true) {
 			if (typeof this._updateInterval !== 'undefined')
 				clearInterval(this._updateInterval);
 			this._updateInterval = setInterval(checkSiteData, SCOPE.prefs.get('updateInterval') * 1000);
+			if (recheck)
+				checkSiteData();
 		}
 
 		getButtonIndexes(id = NOTIF_ID) {
@@ -596,7 +596,7 @@
 				SCOPE.ext.setSignedIn(req.data.signedIn);
 				SCOPE.ext.setUsername(req.data.username);
 				SCOPE.ext.setAutoTheme(req.data.theme);
-				SCOPE.ext.restartUpdateInterval();
+				SCOPE.ext.restartUpdateInterval(false);
 				break;
 			case 'testMessage':
 				const id = NOTIF_ID + '-Test';

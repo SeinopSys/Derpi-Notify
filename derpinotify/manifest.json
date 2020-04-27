@@ -1,6 +1,6 @@
 {
 	"name": "Derpi-Notify",
-	"version": "1.2.7",
+	"version": "1.2.8",
 	"description": "Keep track of your Derpibooru notifications and messages in (almost) real time",
 	"applications": {
 		"gecko": {
@@ -9,10 +9,12 @@
 	},
 	"permissions": [
 		"https://derpibooru.org/",
-		"https://www.derpibooru.org/",
-		"https://trixiebooru.org/",
 		"storage",
 		"notifications"
+	],
+  "optional_permissions": [
+		"https://www.derpibooru.org/",
+		"https://trixiebooru.org/"
 	],
 	"background": {
 		"page": "background.html"
