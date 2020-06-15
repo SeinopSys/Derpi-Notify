@@ -1,9 +1,9 @@
 (function() {
 
-	"use strict";
+	'use strict';
 
 	// Avoid re-sending data from a cached page
-	if (!!window.performance && window.performance.getEntriesByType('navigation')[0].type === "back_forward")
+	if (!!window.performance && window.performance.getEntriesByType('navigation')[0].type === 'back_forward')
 		return;
 
 	const isFirefox = 'browser' in window;
@@ -25,11 +25,11 @@
 			theme: qs('body').dataset.theme,
 		};
 
-		chrome.runtime.sendMessage({ action: "onSiteUpdate", data });
+		chrome.runtime.sendMessage({ action: 'onSiteUpdate', data });
 	};
 
 	if (!isFirefox)
-		chrome.runtime.sendMessage({ action: "getSelectors" }, callback);
-	else browser.runtime.sendMessage({ action: "getSelectors" }).then(callback);
+		chrome.runtime.sendMessage({ action: 'getSelectors' }, callback);
+	else browser.runtime.sendMessage({ action: 'getSelectors' }).then(callback);
 
 })();

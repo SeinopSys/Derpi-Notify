@@ -1,6 +1,6 @@
 (function() {
 
-	"use strict";
+	'use strict';
 
 	const isFirefox = 'browser' in window;
 	$('body').addClass(isFirefox ? 'firefox' : 'chrome');
@@ -16,16 +16,16 @@
 			if (el.nodeName === 'INPUT'){
 				let { name, value } = el;
 				switch (el.type){
-					case "number":
+					case 'number':
 						value = parseInt(value, 10);
-					break;
-					case "checkbox":
+						break;
+					case 'checkbox':
 						value = el.checked;
-					break;
-					case "radio":
+						break;
+					case 'radio':
 						if (!el.checked)
 							return;
-					break;
+						break;
 				}
 				data[name] = value;
 			}
@@ -41,10 +41,10 @@
 
 	// Make the first letter of the first or all word(s) uppercase
 	$.capitalize = str => {
-		return str.length === 1 ? str.toUpperCase() : str[0].toUpperCase()+str.substring(1);
+		return str.length === 1 ? str.toUpperCase() : str[0].toUpperCase() + str.substring(1);
 	};
 
-	$.fn.hasAttr = function(attr){
+	$.fn.hasAttr = function(attr) {
 		const el = this.get(0);
 		return el && el.hasAttribute(attr);
 	};
@@ -78,17 +78,17 @@
 	const $notifIcons = $('#notifIcons');
 	const $notifIconStyleSection = $('#notifIconStyleSection');
 	const $theme = $('#theme');
-	const $themeLink = $(document.createElement('link')).attr('rel','stylesheet').appendTo('head');
+	const $themeLink = $(document.createElement('link')).attr('rel', 'stylesheet').appendTo('head');
 
-	function getOptionsData(){
-		chrome.runtime.sendMessage({ action: "getOptionsData" }, function(response) {
-			$themeLink.attr('href',`css/theme-${response.theme}.css`);
-			$version.text('v'+response.version);
+	function getOptionsData() {
+		chrome.runtime.sendMessage({ action: 'getOptionsData' }, function(response) {
+			$themeLink.attr('href', `css/theme-${response.theme}.css`);
+			$version.text('v' + response.version);
 
 			$badgeColor.val(response.prefs.badgeColor).spectrum({
 				color: response.prefs.badgeColor,
 				showInput: true,
-				preferredFormat: "hex",
+				preferredFormat: 'hex',
 				allowEmpty: false,
 				cancelText: 'close',
 				chooseText: 'Set',
@@ -130,7 +130,7 @@
 			});
 			$notifIconStyleSection.empty();
 			$.each(response.validIconStyles, (iconName, styles) => {
-				const $iconSelect = $(document.createElement('div')).attr('class','fancy-radio');
+				const $iconSelect = $(document.createElement('div')).attr('class', 'fancy-radio');
 				const groupName = `${iconName}IconStyle`;
 				$.each(styles, (_, style) => {
 					$iconSelect.append(
@@ -153,18 +153,19 @@
 			});
 		});
 	}
+
 	getOptionsData();
 
-	function sub(enable){
+	function sub(enable) {
 		$submitButton.attr('disabled', !enable);
-		$savingSettings[enable?'addClass':'removeClass']('hidden');
+		$savingSettings[enable ? 'addClass' : 'removeClass']('hidden');
 		if (enable)
 			$savedSettings.removeClass('hidden');
 		else $savedSettings.addClass('hidden');
 	}
 
-	function updateOptions(data){
-		chrome.runtime.sendMessage({ action: "updateOptions", data }, function(response) {
+	function updateOptions(data) {
+		chrome.runtime.sendMessage({ action: 'updateOptions', data }, function(response) {
 			sub(true);
 
 			$form.find('.error').remove();
@@ -175,7 +176,7 @@
 			else {
 				$.each(response.errors, (key, errors) => {
 					const $field = $(`#${key}`).closest('.field');
-					const $ul = $(document.createElement('ul')).attr('class','error');
+					const $ul = $(document.createElement('ul')).attr('class', 'error');
 					errors.forEach(el => {
 						$ul.append(
 							$(document.createElement('li')).text(el)
@@ -197,20 +198,24 @@
 
 		const requestPermission = () => {
 			requestDomainPermission(data.preferredDomain)
-				.then(() => { updateOptions(data) })
+				.then(() => {
+					updateOptions(data);
+				})
 				.catch(() => {
 					delete data.preferredDomain;
 					updateOptions(data);
 				});
 		};
 
-		if (isFirefox) {
+		if (isFirefox){
 			requestPermission();
 			return;
 		}
 
 		checkDomainPermissions(data.preferredDomain)
-			.then(() => { updateOptions(data) })
+			.then(() => {
+				updateOptions(data);
+			})
 			.catch(requestPermission);
 	});
 	$testButton.on('click', (e) => {

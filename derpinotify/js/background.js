@@ -1,6 +1,6 @@
 (function(undefined) {
 
-	"use strict";
+	'use strict';
 
 	const SCOPE = {};
 
@@ -37,7 +37,7 @@
 	NOTIFICATION_SOUND.preload = true;
 
 	const DEFAULT_OPTIONS = {
-		badgeColor: "#618fc3",
+		badgeColor: '#618fc3',
 		preferredDomain: VALID_DOMAINS[0],
 		theme: 'auto',
 		updateInterval: 60,
@@ -50,7 +50,7 @@
 	};
 
 	function parseHtml(html) {
-		return (new DOMParser()).parseFromString(html, "text/html");
+		return (new DOMParser()).parseFromString(html, 'text/html');
 	}
 
 	function plural(n, w) {
@@ -111,8 +111,7 @@
 			let parsed;
 			try {
 				parsed = JSON.parse(localStorage.getItem('options'));
-			}
-			catch (e){
+			} catch (e){
 			}
 
 			let setThese;
@@ -364,7 +363,7 @@
 			});
 		}
 
-		notifyUser(prefs = SCOPE.prefs, unread = this._unread, id = NOTIF_ID){
+		notifyUser(prefs = SCOPE.prefs, unread = this._unread, id = NOTIF_ID) {
 			if (prefs.get('notifSound')){
 				this.playNotifSound();
 			}
@@ -436,7 +435,7 @@
 			else chrome.notifications.create(id, params, next);
 		}
 
-		clearNotif(id = NOTIF_ID){
+		clearNotif(id = NOTIF_ID) {
 			return new Promise(res => {
 				chrome.notifications.clear(id, () => {
 					delete this._clearNotifTimeout[id];
@@ -490,7 +489,7 @@
 			return this._buttonIndexes[id];
 		}
 
-		playNotifSound(){
+		playNotifSound() {
 			NOTIFICATION_SOUND.currentTime = 0;
 			NOTIFICATION_SOUND.play();
 		}
@@ -545,7 +544,7 @@
 			else {
 				return chrome.windows.create({
 					url,
-					'focused': true
+					'focused': true,
 				});
 			}
 		});

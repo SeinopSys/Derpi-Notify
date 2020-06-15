@@ -14,7 +14,7 @@
 body {
 	color: var(--popup-text);
 	background: var(--popup-bg);
-    font-family: verdana,arial,helvetica,sans-serif;
+	font-family: verdana, arial, helvetica, sans-serif;
 	margin: 0;
 }
 
@@ -28,17 +28,17 @@ body.chrome .firefox-only {
 }
 
 a, a:active, a:visited {
-    color: var(--link-normal);
+	color: var(--link-normal);
 	text-decoration: none;
 }
 
 a:hover {
-    color: var(--link-hover);
+	color: var(--link-hover);
 }
 
 #content {
 	background: var(--container-bg);
-    padding: 16px 12px;
+	padding: 16px 12px;
 }
 
 #content > * {
@@ -50,49 +50,49 @@ a:hover {
 }
 
 h1, h2, h3, h4, h5 {
-    font-weight: normal;
-    text-rendering: optimizeLegibility;
-    margin-bottom: .62em;
+	font-weight: normal;
+	text-rendering: optimizeLegibility;
+	margin-bottom: .62em;
 }
 
 .button, .sp-choose {
-    background-color: var(--button-bg);
-    border: 1px solid var(--button-border);
-    box-sizing: border-box;
-    color: var(--button-text);
-    display: inline-block;
-    font-family: inherit;
-    font-size: 14px;
-    padding: 4px 6px;
-    border-radius: 0;
-    cursor: pointer;
+	background-color: var(--button-bg);
+	border: 1px solid var(--button-border);
+	box-sizing: border-box;
+	color: var(--button-text);
+	display: inline-block;
+	font-family: inherit;
+	font-size: 14px;
+	padding: 4px 6px;
+	border-radius: 0;
+	cursor: pointer;
 }
 
 .button:hover, .sp-choose:hover {
-    background-color: var(--button-bg-hover);
-    border-color: var(--button-border-hover);
+	background-color: var(--button-bg-hover);
+	border-color: var(--button-border-hover);
 }
 
 .button:active, .button:hover, .button:visited, .sp-choose:active, .sp-choose:hover {
-    color: var(--button-text);
+	color: var(--button-text);
 }
 
 .input, .sp-input {
-    box-sizing: border-box;
-    padding: 6px;
-    border: 1px solid var(--button-border);
-    font-size: 14px;
-    font-family: "Droid Sans Mono",monospace;
-    color: var(--button-text);
-    background: var(--button-bg);
-    max-width: 100%;
-    border-radius: 0;
+	box-sizing: border-box;
+	padding: 6px;
+	border: 1px solid var(--button-border);
+	font-size: 14px;
+	font-family: "Droid Sans Mono", monospace;
+	color: var(--button-text);
+	background: var(--button-bg);
+	max-width: 100%;
+	border-radius: 0;
 }
 
 .input:focus, .sp-input:focus {
-    outline: 0;
-    border: 1px solid var(--button-border-hover);
-    background: var(--button-bg-hover);
+	outline: 0;
+	border: 1px solid var(--button-border-hover);
+	background: var(--button-bg-hover);
 }
 
 .input-short {
@@ -105,9 +105,9 @@ h1, h2, h3, h4, h5 {
 }
 
 .block-tab {
-    border: 1px solid var(--block-tab-border);
-    background: var(--popup-bg);
-    padding: 10px;
+	border: 1px solid var(--block-tab-border);
+	background: var(--popup-bg);
+	padding: 10px;
 }
 
 .field {
@@ -137,7 +137,7 @@ h1, h2, h3, h4, h5 {
 }
 
 .field:not(:last-child) {
-    margin-bottom: 10px;
+	margin-bottom: 10px;
 }
 
 .fieldlabel {
@@ -161,7 +161,7 @@ h1, h2, h3, h4, h5 {
 	list-style: none;
 	box-sizing: border-box;
 }
-.field .error li:not(:last-child){
+.field .error li:not(:last-child) {
 	margin-bottom: var(--padding);
 }
 
@@ -176,7 +176,7 @@ fieldset legend {
 }
 
 button, select {
-    text-transform: none;
+	text-transform: none;
 }
 
 footer {

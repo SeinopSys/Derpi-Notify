@@ -1,15 +1,16 @@
-(function(){
-	"use strict";
+(function() {
+	'use strict';
 
 	const isFirefox = 'browser' in window;
 
-	function domainPermissionCallback(result, res, rej){
+	function domainPermissionCallback(result, res, rej) {
 		if (result)
 			res();
 		else rej();
 	}
-	function domainPermissionAction(domain, action){
-		const perm = { origins: [ `https://${domain}/` ] };
+
+	function domainPermissionAction(domain, action) {
+		const perm = { origins: [`https://${domain}/`] };
 
 		if (isFirefox)
 			return browser.permissions[action](perm)

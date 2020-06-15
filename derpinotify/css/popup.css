@@ -27,8 +27,8 @@
 
 #popup-icons .icon-image,
 #popup-icons .icon-count {
-    display: inline-flex;
-    line-height: inherit;
+	display: inline-flex;
+	line-height: inherit;
 }
 
 #popup-icons .icon-link {
@@ -46,9 +46,9 @@
 #popup-icons .icon-count {
 	background: var(--icon-bg-hover);
 	color: var(--icon-text);
-    padding: 0 .375em;
-    margin-left: .375em;
-    text-align: center;
+	padding: 0 .375em;
+	margin-left: .375em;
+	text-align: center;
 }
 #popup-icons .icon-count:empty {
 	display: none;
