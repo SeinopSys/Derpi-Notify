@@ -11,7 +11,7 @@
 		parseURL: '/pages/about',
 		messages: '/conversations',
 		notifs: '/notifications',
-		signInPage: '/session/new',
+		signInPage: '/sessions/new',
 	};
 	const VALID_DOMAINS = (function() {
 		const manifest = chrome.runtime.getManifest();
